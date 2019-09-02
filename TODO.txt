@@ -1,2 +1,3 @@
 8/3/19 -- Install influxdb, get the keylogger data and emg signal data into it, and visualize some data!
 9/1/19 -- Organize and Save everything to github!!! Run both the keylogger and emg at the same time, start looking over grafana for some pattern. Look into SciKit learn for the machine learning?
+9/1/19 -- Fill out the Readme, fix issues with imports to myo-raw, and give more credit to the dependencies. Run keylogger and emg simultaneously, start looking for pattern, investigate using SciKit learn
