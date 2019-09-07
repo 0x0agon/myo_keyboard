@@ -55,7 +55,7 @@ class KeyLoggerDataFormatter(object):
         with open(self.filename, 'r') as raw_key_file:
             for line in raw_key_file:
                 # TODO: make this data extraction less fragile
-                stripped_line = line.strip('\n').split(' ')
+                stripped_line = line.strip('\n').split()
                 if len(stripped_line) == 3:
                     # TODO: handle special keys like return, ctrl, etc.
                     key_pressed = stripped_line[2].strip('[').strip(']')

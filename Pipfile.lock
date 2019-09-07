@@ -1,0 +1,28 @@
+{
+    "_meta": {
+        "hash": {
+            "sha256": "095067c355f3d03f28f831abb6f3234c86d3518c436253288774eac654254179"
+        },
+        "pipfile-spec": 6,
+        "requires": {
+            "python_version": "3.7"
+        },
+        "sources": [
+            {
+                "name": "pypi",
+                "url": "https://pypi.org/simple",
+                "verify_ssl": true
+            }
+        ]
+    },
+    "default": {
+        "libtmux": {
+            "hashes": [
+                "sha256:2acd86617203bc966b125d016526fb40503411a2281b55d9d970a487dc6e065a"
+            ],
+            "index": "pypi",
+            "version": "==0.8.2"
+        }
+    },
+    "develop": {}
+}
