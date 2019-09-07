@@ -1,5 +1,7 @@
 import time
+import os
 
+current_dir = os.getcwd()
 
 def add_header(output_file, database):
     output_file.seek(0)
@@ -10,7 +12,7 @@ def add_header(output_file, database):
 class EMGDataFormatter(object):
     def __init__(self, filename, output_dir=None):
         self.filename = filename
-        self.output_dir = output_dir if output_dir else '/Users/b/workspace/personal/myo_keyboard/'
+        self.output_dir = output_dir if output_dir else current_dir
 
     def format(self):
         formatted_data = []
@@ -46,7 +48,7 @@ class EMGDataFormatter(object):
 class KeyLoggerDataFormatter(object):
     def __init__(self, filename, output_dir=None):
         self.filename = filename
-        self.output_dir = output_dir if output_dir else '/Users/b/workspace/personal/myo_keyboard/'
+        self.output_dir = output_dir if output_dir else current_dir
 
     def format(self):
         formatted_data = []
@@ -75,14 +77,8 @@ class KeyLoggerDataFormatter(object):
 
 
 if __name__ == '__main__':
-    emg_formatter = EMGDataFormatter(
-        filename='/Users/b/workspace/personal/myo_keyboard/myo-raw/emg_log.txt',
-        output_dir='/Users/b/workspace/personal/myo_keyboard/'
-    )
+    emg_formatter = EMGDataFormatter(filename=current_dir + '/emg_log.txt')
     emg_formatter.format()
 
-    key_formatter = KeyLoggerDataFormatter(
-        filename='/Users/b/workspace/personal/myo_keyboard/keylogger/mac/here.csv',
-        output_dir='/Users/b/workspace/personal/myo_keyboard/'
-    )
+    key_formatter = KeyLoggerDataFormatter(filename=current_dir + 'keylog.txt')
     key_formatter.format()

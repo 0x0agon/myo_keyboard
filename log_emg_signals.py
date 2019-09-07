@@ -1,6 +1,9 @@
 #! /usr/local/bin/python3
+import os
 import sys
 import time
+current_dir = os.getcwd()
+sys.path.append(current_dir + '/../myo-raw/')
 import myo_raw as myolib
 
 
