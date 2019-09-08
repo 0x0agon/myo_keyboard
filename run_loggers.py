@@ -1,26 +1,36 @@
 import libtmux
+import os
 import signal
 import sys
-import os
+import time
 
-signal.signal(signal.SIGINT, signal_handler)
-
-
-def signal_handler(sig, frame):
-    print('shutdown loggers here!')
-    sys.exit(0)
+# signal.signal(signal.SIGINT, signal_handler)
+# def signal_handler(sig, frame):
+#     print('shutdown loggers here!')
+#     sys.exit(0)
 
 
 class Runner(object):
     def __init__(self):
+        signal.signal(signal.SIGINT, lambda signal, frmae: self._signal_handler())
         self.server = libtmux.Server()
         # find current tmux session name
         current_session_name = os.popen("tmux display-message -p '#S'").read().strip('\n')
         self.session = self.server.find_where({'session_name': current_session_name})
         self.window_name = 'running_loggers'
 
+    def _signal_handler(self):
+        print('shutting down loggers.')
+        self.exit()
+        sys.exit(0)
+
     def exit(self):
-        self.session.kill_window(self.window_name)
+        windows = self.session.list_windows()
+        print('session\'s windows: {}'.format(windows))
+        print('trying to kill the one named {}'.format(self.window_name))
+        for window in windows:
+            if window.name == self.window_name:
+                self.session.kill_window(window.id)
 
     def run(self):
         # Create a new background tmux window, with 2 panes
@@ -46,7 +56,11 @@ class Runner(object):
         bottom_pane.send_keys('echo "python3 log_emg_signals.py"')
 
         # listen for Ctrl+c, and shut down loggers when the signal is received
+        print('Running, press Ctrl+C to kill loggers and exit')
+        while True:
+            time.sleep(0.2)
 
 
 if __name__ == '__main__':
-        run()
+    runner = Runner()
+    runner.run()
