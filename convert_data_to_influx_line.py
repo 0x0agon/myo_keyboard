@@ -16,7 +16,6 @@ class EMGDataFormatter(object):
 
     def format(self):
         formatted_data = []
-        # with open('/Users/b/workspace/personal/myo_keyboard/myo-raw/emg_log.txt', 'r') as raw_emg_file:
         with open(self.filename, 'r') as raw_emg_file:
             for line in raw_emg_file:
                 new_line = line.split('(')
@@ -39,10 +38,12 @@ class EMGDataFormatter(object):
                                       )
 
         print('formatted data: {}'.format(formatted_data[-1]))
-        with open(self.output_dir + 'formatted_emg_' + str(time.time()) + '.txt', 'w+') as output_file:
+        output_filename = self.output_dir + '/formatted_emg_' + str(time.time()) + '.txt'
+        with open(output_filename, 'w+') as output_file:
             add_header(output_file, 'emg_signals')
             for line in formatted_data:
                 output_file.write("%s\n" % line)
+        return output_filename
 
 
 class KeyLoggerDataFormatter(object):
@@ -69,16 +70,17 @@ class KeyLoggerDataFormatter(object):
                                               )
 
         print('formatted data: {}'.format(formatted_data[-1]))
-        output_filename = self.output_dir + 'formatted_keys_' + str(time.time()) + '.txt'
+        output_filename = self.output_dir + '/formatted_keys_' + str(time.time()) + '.txt'
         with open(output_filename, 'w') as output_file:
             add_header(output_file, 'key_log')
             for line in formatted_data:
                 output_file.write("%s\n" % line)
+        return output_filename
 
 
 if __name__ == '__main__':
     emg_formatter = EMGDataFormatter(filename=current_dir + '/emg_log.txt')
     emg_formatter.format()
 
-    key_formatter = KeyLoggerDataFormatter(filename=current_dir + 'keylog.txt')
+    key_formatter = KeyLoggerDataFormatter(filename=current_dir + '/keylog.txt')
     key_formatter.format()

@@ -3,12 +3,14 @@ import os
 import signal
 import sys
 import time
+from convert_data_to_influx_line import EMGDataFormatter, KeyLoggerDataFormatter
 
 # signal.signal(signal.SIGINT, signal_handler)
 # def signal_handler(sig, frame):
 #     print('shutdown loggers here!')
 #     sys.exit(0)
 
+current_dir = os.getcwd()
 
 class Runner(object):
     def __init__(self):
@@ -31,6 +33,12 @@ class Runner(object):
         for window in windows:
             if window.name == self.window_name:
                 self.session.kill_window(window.id)
+        print('formatting log files')
+        keylog_formatter = KeyLoggerDataFormatter(filename=current_dir + '/key_log.txt', output_dir=current_dir + '/output_files')
+        keylog_formatter.format()
+        emglog_formatter = EMGDataFormatter(filename=current_dir + '/emg_log.txt', output_dir=current_dir + '/output_files')
+        emglog_formatter.format()
+        # TODO: stick the data into influx on exit
 
     def run(self):
         # Create a new background tmux window, with 2 panes
@@ -46,14 +54,15 @@ class Runner(object):
         top_pane = find_top_pane(w)
         # top_pane = w.select_pane('%21')
 
-        keylog_filename = 'key_log.txt'
-        emglog_filename = 'emg_log.txt'
+        keylog_filename = current_dir + '/key_log.txt'
+        emglog_filename = current_dir + '/emg_log.txt'
 
         print('Starting keylogger in the background.')
-        top_pane.send_keys('echo "./keylogger {}"'.format(keylog_filename))
+        # top_pane.send_keys('echo "./keylogger {}"'.format(keylog_filename))
+        top_pane.send_keys('./keylogger {}'.format(keylog_filename))
 
         print('Starting emg logger in the background.')
-        bottom_pane.send_keys('echo "python3 log_emg_signals.py"')
+        bottom_pane.send_keys('python3 log_emg_signals.py')
 
         # listen for Ctrl+c, and shut down loggers when the signal is received
         print('Running, press Ctrl+C to kill loggers and exit')
